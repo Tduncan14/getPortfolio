@@ -1,9 +1,9 @@
 import {useState,useEffect} from 'react';
-import Link from '../Link';
+import { Link as RouterLink} from 'react-router-dom'
 import List from '../List';
 
 
-function Projects ({username}) {
+const Projects = ({userName})  => {
 
     const [loading,setLoading] = useState(true);
     const [projects,setProjects] = useState({})
@@ -14,15 +14,13 @@ function Projects ({username}) {
         async function  fetchData(){
 
             const data = await fetch(
-                `https://api.github.com/users/${
-                    userName}/repos
-                }`
+                `https://api.github.com/users/${userName}/repos`
             )
 
             const result = await data.json()
 
 
-            if(results){
+            if(result){
                 setProjects(result);
                 setLoading(false);
             }
@@ -44,7 +42,9 @@ return(
         <div>
             <List items = {projects.map((project) => ({
                 field:project.name,
-                value: <Link url ={project.html_url} title={project.html_url} />
+                value: <RouterLink to ={`/projects/${project.name}`} title={project.html_url}>
+                    Open project
+                </RouterLink>
             }))} />
 
         </div>
@@ -60,4 +60,4 @@ return(
 
 
 
-export default <Projects></Projects>
+export default Projects
